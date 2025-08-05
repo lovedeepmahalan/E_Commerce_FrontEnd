@@ -2,7 +2,7 @@ import { Button, IconButton, rgbToHex } from "@mui/material";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { green } from "@mui/material/colors";
-const CartItem = () => {
+const CartItem = ({item}) => {
   return (
     <div className="p-5 shadow-lg border rounded-md">
       <div className="flex items-center">
@@ -17,15 +17,15 @@ const CartItem = () => {
 
         {/* Text Content */}
         <div className="ml-5 space-y-1">
-          <p className="font-semibold">Men Slim Mid Rise Black Jeans</p>
-          <p className="opacity-70">Size: L, White</p>
-          <p className="opacity-70 mt-2">Seller: Cristhaliyo 2fashion</p>
+          <p className="font-semibold">{item.product.title}</p>
+          <p className="opacity-70">Size: {item.size}, White</p>
+          <p className="opacity-70 mt-2">Seller: {item.product.brand}</p>
 
           {/* Price Section */}
           <div className="flex space-x-5 items-center text-gray-900 pt-6">
-            <p className="font-semibold">₹199</p>
-            <p className="opacity-50 line-through">₹211</p>
-            <p className="text-green-600 font-semibold">5% Off</p>
+            <p className="font-semibold">₹{item.price}</p>
+            <p className="opacity-50 line-through">₹{item.discountedPrice}</p>
+            <p className="text-green-600 font-semibold">{item.discountPersent}% Off</p>
           </div>
         </div>
       </div>

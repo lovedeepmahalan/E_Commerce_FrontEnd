@@ -9,7 +9,11 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import HomeSectionCard from "../HomeSectioncard/HomeSectionCard"
 import mens_kurta from '../../Data/Mens_Kurta';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { findProductById } from '../../../State/Product/Action';
+import { addItemToCart } from '../../../State/cart/Action';
 
 
 const product = {
@@ -68,11 +72,27 @@ function classNames(...classes) {
 
 export default function ProductDetail() {
 
-    const navigate=useNavigate()
+    const [selectedSize, setSelectedSize] = useState(product.sizes[3]?.id)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const params = useParams()
+    const { customerproduct } = useSelector(store => store)
 
-    const handleAddToCart=()=>{
-        navigate('/cart')
-    }
+    console.log("---" + params.productId)
+
+
+    const handleAddToCart = () => {
+        const sizeObj = product.sizes.find(size => size.id === selectedSize);
+        const data = { productId: params.productId, size: sizeObj?.name };
+        dispatch(addItemToCart(data));
+        navigate('/cart');
+    };
+
+
+    useEffect(() => {
+        const data = { productId: params.productId }
+        dispatch(findProductById(data))
+    }, [params.productId])
 
     return (
         <div className="bg-white">
@@ -111,7 +131,7 @@ export default function ProductDetail() {
                         <div className='overflow-hidden rounded-lg max-h-lvh'>
                             <img
                                 alt={product.images[0].alt}
-                                src={product.images[0].src}
+                                src={customerproduct.product?.imageUrl}
                                 className="row-span-2 aspect-3/4 size-full rounded-lg object-cover max-lg:hidden"
                             />
                         </div>
@@ -130,9 +150,9 @@ export default function ProductDetail() {
                     {/* Product info */}
                     <div className="lg:col-span-1 maxt-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
                         <div className="lg:col-span-2 ">
-                            <h1 className="text-xl lg:text-xl font-semibold text-gray-900">UniversalOutFit</h1>
+                            <h1 className="text-xl lg:text-xl font-semibold text-gray-900">{customerproduct.product?.brand}</h1>
                             <h1 className='text-xl lg:text-xl text-gray-900 opacity-60 pt-1'>
-                                Casual Puff Women T-shirt
+                                {customerproduct.product?.title}
                             </h1>
                         </div>
 
@@ -140,9 +160,9 @@ export default function ProductDetail() {
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h2 className="sr-only">Product information</h2>
                             <div className='flex space-x-5 items-center text-lg lg:text-xl text-gray900 mt-6'>
-                                <p className='semi-bold'>₹199</p>
-                                <p className='opacity-50 line-through'>₹211</p>
-                                <p className='text-pink-600 semi-bold'>5% OFF</p>
+                                <p className='semi-bold'>₹{customerproduct.product?.discountedPrice}</p>
+                                <p className='opacity-50 line-through'>₹{customerproduct.product?.price}</p>
+                                <p className='text-pink-600 semi-bold'>{customerproduct.product?.discountPersent}% OFF</p>
                             </div>
 
                             {/* Reviews */}
@@ -162,31 +182,40 @@ export default function ProductDetail() {
                                 <div className="mt-10">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-medium text-gray-900">Size</h3>
-
                                     </div>
 
-                                    <fieldset aria-label="Choose a size" className="mt-4">
+                                    <fieldset className="mt-4">
+                                        <legend className="sr-only">Choose a size</legend>
                                         <div className="grid grid-cols-4 gap-3">
                                             {product.sizes.map((size) => (
                                                 <label
                                                     key={size.id}
-                                                    aria-label={size.name}
-                                                    className="group relative flex items-center justify-center rounded-md border border-gray-300 bg-white p-3 has-checked:border-indigo-600 has-checked:bg-indigo-600 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-indigo-600 has-disabled:border-gray-400 has-disabled:bg-gray-200 has-disabled:opacity-25"
-                                                >
+                                                    className="
+                                                        group relative flex items-center justify-center rounded-md border 
+                                                        border-gray-300 bg-white p-3 
+                                                        peer-checked:border-indigo-600 peer-checked:bg-indigo-600 
+                                                        peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-indigo-600 
+                                                        disabled:border-gray-400 disabled:bg-gray-200 disabled:opacity-25
+                                                        cursor-pointer">
                                                     <input
-                                                        defaultValue={size.id}
-                                                        defaultChecked={size === product.sizes[2]}
+                                                        value={size.id}
+                                                        checked={selectedSize === size.id}
+                                                        onChange={() => setSelectedSize(size.id)}
                                                         name="size"
                                                         type="radio"
                                                         disabled={!size.inStock}
-                                                        className="absolute inset-0 appearance-none focus:outline-none disabled:cursor-not-allowed"
+                                                        className="peer absolute inset-0 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed"
+
                                                     />
-                                                    <span className="text-sm font-medium uppercase group-has-checked:text-white">{size.name}</span>
+                                                    <span className="text-sm font-medium uppercase group-[:has(input:checked)]:text-white">
+                                                        {size.name}
+                                                    </span>
                                                 </label>
                                             ))}
                                         </div>
                                     </fieldset>
                                 </div>
+
 
                                 <Button onClick={handleAddToCart} variant="contained" sx={{ px: '2rem', py: '1rem', bgcolor: "#9561fd" }}>
                                     Add To Cart
@@ -363,8 +392,8 @@ export default function ProductDetail() {
                 <section className='pt-10'>
                     <h1 className='py-5 text-xl font-bold'> Similar Products</h1>
                     <div className='flex flex-wrap space-x-5'>
-                        {mens_kurta.map((item)=><HomeSectionCard product={item}/>)}
-                     </div>
+                        {mens_kurta.map((item) => <HomeSectionCard product={item} />)}
+                    </div>
                 </section>
             </div>
         </div>
