@@ -48,10 +48,10 @@ const product = {
         { id: 'black', name: 'Black', classes: 'bg-gray-900 checked:outline-gray-900' },
     ],
     sizes: [
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
+        { id: 1, name: 'S', inStock: true },
+        { id: 2, name: 'M', inStock: true },
+        { id: 3, name: 'L', inStock: true },
+        { id: 4, name: 'XL', inStock: true },
     ],
     description:
         'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
@@ -180,38 +180,46 @@ export default function ProductDetail() {
 
                                 {/* Sizes */}
                                 <div className="mt-10">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                                    </div>
+                                   
 
                                     <fieldset className="mt-4">
                                         <legend className="sr-only">Choose a size</legend>
-                                        <div className="grid grid-cols-4 gap-3">
-                                            {product.sizes.map((size) => (
-                                                <label
-                                                    key={size.id}
-                                                    className="
-                                                        group relative flex items-center justify-center rounded-md border 
-                                                        border-gray-300 bg-white p-3 
-                                                        peer-checked:border-indigo-600 peer-checked:bg-indigo-600 
-                                                        peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-offset-2 peer-focus:ring-indigo-600 
-                                                        disabled:border-gray-400 disabled:bg-gray-200 disabled:opacity-25
-                                                        cursor-pointer">
-                                                    <input
-                                                        value={size.id}
-                                                        checked={selectedSize === size.id}
-                                                        onChange={() => setSelectedSize(size.id)}
-                                                        name="size"
-                                                        type="radio"
-                                                        disabled={!size.inStock}
-                                                        className="peer absolute inset-0 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed"
 
-                                                    />
-                                                    <span className="text-sm font-medium uppercase group-[:has(input:checked)]:text-white">
-                                                        {size.name}
-                                                    </span>
-                                                </label>
-                                            ))}
+
+                                        <div className="mt-10">
+                                            <div className="flex items-center justify-between">
+                                                <h3 className="text-sm font-medium text-gray-900">Size</h3>
+                                            </div>
+
+                                            <fieldset className="mt-4">
+                                                <legend className="sr-only">Choose a size</legend>
+                                                <div className="grid grid-cols-4 gap-3">
+                                                    {product.sizes.map((size) => (
+                                                        <label
+                                                            key={size.id}
+                                                            onClick={() => setSelectedSize(size.id)} // manually update selected
+                                                            className={`
+                                                                        group relative flex items-center justify-center rounded-md border 
+                                                                        border-gray-300 bg-white p-3 
+                                                                        ${selectedSize === size.id ? 'bg-sky-400 border-sky-400 text-black' : 'text-gray-900'} 
+                                                                        disabled:border-gray-400 disabled:bg-gray-200 disabled:opacity-25
+                                                                        cursor-pointer transition-colors duration-200 ease-in-out
+                                                                    `}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                name="size"
+                                                                value={size.id}
+                                                                checked={selectedSize === size.id}
+                                                                onChange={() => setSelectedSize(size.id)}
+                                                                disabled={!size.inStock}
+                                                                className="sr-only"
+                                                            />
+                                                            <span className="text-sm font-medium uppercase">{size.name}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </fieldset>
                                         </div>
                                     </fieldset>
                                 </div>

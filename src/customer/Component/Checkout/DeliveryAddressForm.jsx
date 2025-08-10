@@ -1,21 +1,30 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
 import AddressCard from "../AddressCard/AddressCard";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {createOrder} from "../../../State/Order/Action"
 
 const DeliveryAddressForm = () => {
 
-    const handleEvent=(e)=>{
-        e.preventDefault()
-        const data=new FormData(e.currentTarget);
-        const address={
-            firstName:data.get('firstName'),
-            lastName:data.get('last Name'),
-            streetAddress:data.get("address"),
-            city:data.get('city'),
-            state:data.get('state'),
-            zipcode:data.get('zip code')
-        }
-        console.log('address',address)
-    }
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+
+    const handleEvent = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    const address = {
+        firstName: data.get('firstName'),
+        lastName: data.get('lastName'),   
+        streetAddress: data.get('address'),
+        state: data.get('state'),
+        city:data.get('city'),
+        pinCode: data.get('pin'),        
+    };
+
+    const orderData = { address,navigate };
+    dispatch(createOrder(orderData)); 
+};
 
   return (
     <Grid container spacing={4}>
@@ -82,6 +91,16 @@ const DeliveryAddressForm = () => {
                   autoComplete="address-level1"
                 />
               </Grid>
+               <Grid size={{ xs: 12, sm: 6 }}>
+                <TextField
+                  required
+                  id="city"
+                  name="city"
+                  label="City"
+                  fullWidth
+                  autoComplete="address-level1"
+                />
+              </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   required
@@ -90,16 +109,6 @@ const DeliveryAddressForm = () => {
                   label="Pin Code"
                   fullWidth
                   autoComplete="postal-code"
-                />
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <TextField
-                  required
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  label="Phone Number"
-                  fullWidth
-                  autoComplete="tel"
                 />
               </Grid>
               <Grid size={{ xs: 12, sm: 6 }}>

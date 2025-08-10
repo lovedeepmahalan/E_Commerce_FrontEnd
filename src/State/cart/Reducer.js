@@ -3,7 +3,7 @@ const initialState = {
     cart: null,
     loading: false,
     error: null,
-    cartItems: [],
+    cartItem: [],
 };
 
 export const cartReducer = (state = initialState, action) => {
@@ -14,7 +14,7 @@ export const cartReducer = (state = initialState, action) => {
         case ADD_ITEM_TO_CART_SUCCESS:
             return {
                 ...state,
-                cartItems: [...state.cartItems, action.payload.cartItems],
+                cartItem: [...state.cartItem, action.payload.cartItem],
                 loading: false,
             };
 
@@ -26,7 +26,7 @@ export const cartReducer = (state = initialState, action) => {
         case GET_CART_SUCCESS:
             return {
                 ...state,
-                cartItems: action.payload.cartItems,
+                cartItem: action.payload.cartItem,
                 cart: action.payload,
                 loading: false,
             };
@@ -46,23 +46,46 @@ export const cartReducer = (state = initialState, action) => {
                 error: null
             };
 
+        // case REMOVE_CART_ITEM_SUCCESS:
+        //     return {
+        //         ...state,
+        //         deletecartItem: action.payload,
+        //         loading: false,
+        //     };
+
         case REMOVE_CART_ITEM_SUCCESS:
-            return {
-                ...state,
-                cartItems: state.cartItems.filter(
-                    (item) => item.id !== action.payload
-                ),
-                loading: false,
-            };
+    return {
+        ...state,
+        cart: {
+            ...state.cart,
+            cartItem: state.cart.cartItem.filter(item => item.id !== action.payload.id),
+            totalPrice: action.payload.totalPrice ?? state.cart.totalPrice,
+            totalDiscountedPrice: action.payload.totalDiscountedPrice ?? state.cart.totalDiscountedPrice,
+            discounte: action.payload.discounte ?? state.cart.discounte
+        },
+        loading: false,
+    };
+        // case UPDATE_CART_ITEM_SUCCESS:
+        //     return {
+        //         ...state,
+        //         updatecartItem: action.payload,
+        //         loading: false,
+        //     };
 
         case UPDATE_CART_ITEM_SUCCESS:
-            return {
-                ...state,
-                cartItems: state.cartItems.map((item) =>
-                    item.id === action.payload.id ? action.payload : item
-                ),
-                loading: false,
-            };
+    return {
+        ...state,
+        cart: {
+            ...state.cart,
+            cartItem: state.cart.cartItem.map(item =>
+                item.id === action.payload.id ? action.payload : item
+            ),
+            totalPrice: action.payload.totalPrice ?? state.cart.totalPrice,
+            totalDiscountedPrice: action.payload.totalDiscountedPrice ?? state.cart.totalDiscountedPrice,
+            discounte: action.payload.discounte ?? state.cart.discounte
+        },
+        loading: false,
+    };
         case REMOVE_CART_ITEM_FAILURE:
         case UPDATE_CART_ITEM_FAILURE:
             return {

@@ -13,18 +13,17 @@ const Cart = () => {
     navigate('/checkout?step=2')
   }
 
-  useEffect(()=>{
-      dispatch(getCart())
-  },[])
+  useEffect(() => {
+  dispatch(getCart());
+}, [cart.cart]); 
   return (
     <div>
       {/* Main layout */}
       <div className="lg:grid grid-cols-3 lg:px-16 relative">
         {/* Left side: Cart items */}
         <div className="col-span-2">
-          {cart.cart?.CartItem?.map((item)=><CartItem item={item}/>)}
-          {cart.cart?.CartItem?.map((item) => (<CartItem key={item.id} item={item} />))}
-
+          {cart.cart?.cartItem?.map((item)=><CartItem item={item}/>)}
+          
         </div>
 
         {/* Right side: Price details */}
@@ -39,11 +38,11 @@ const Cart = () => {
               </div>
               <div className="flex justify-between">
                 <span>Discount</span>
-                <span className='text-green-600'>₹{cart.cart?.discounte}  </span>
+                <span className='text-green-600'>-₹{cart.cart?.discounte}  </span>
               </div>
               <div className="flex justify-between">
-                <span className='text-green-600'>Dilivery Charge</span>
-                <span>Free</span>
+                <span >Delivery Charge</span>
+                <span className='text-green-600'>Free</span>
               </div>
               <div className="flex justify-between">
                 <span>Total Amount</span>
