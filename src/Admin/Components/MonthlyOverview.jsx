@@ -41,21 +41,24 @@ const SalesData=[
 
 const renderStats = () => {
   return SalesData.map((item, index) => (
-    <Grid item xs={12} sm={3} key={index}>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+    <Grid item xs={6} md={3} key={index}>
+      <Box sx={{ display: "flex", alignItems: "center", width: '100%' }}>
         <Avatar
           variant="rounded"
           sx={{
             mr: 3,
-            width: 44,
-            height: 44,
+            width: 88,
+            height: 66,
             boxShadow: 3,
             color: "white",
             backgroundColor: `${item.color}`
-          }}>
-            {item.icon}
+          }}
+        >
+          {item.icon}
         </Avatar>
-        <Box sx={{display:"fles",flexDirection:"column"}}>
+
+        {/* Stat text column */}
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
           <Typography variant="caption">{item.title}</Typography>
           <Typography variant="h6">{item.states}</Typography>
         </Box>
@@ -63,6 +66,7 @@ const renderStats = () => {
     </Grid>
   ));
 };
+
 
 const MonthlyOverview = () => {
   return (

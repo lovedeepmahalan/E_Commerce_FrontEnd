@@ -38,7 +38,7 @@ const ProductsTable = () => {
   }, [])
   return (
     <div >
-      <Card className='mt-2'>
+      <Card className='mt-2' sx={{ mt: 2, height: "100%" }} >
         <CardHeader title="All Products" />
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

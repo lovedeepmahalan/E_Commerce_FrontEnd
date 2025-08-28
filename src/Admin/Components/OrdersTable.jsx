@@ -74,7 +74,7 @@ const handleDeleteOrder = async (orderId) => {
 
   return (
     <div>
-      <Card className="mt-2 bg-[#1b1b1b]">
+      <Card sx={{ mt: 2, height: "100%" }} className="bg-[#1b1b1b]">
         <CardHeader title="All Orders" />
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="orders table">

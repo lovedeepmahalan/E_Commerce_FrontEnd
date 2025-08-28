@@ -30,71 +30,89 @@ const menu = [
   { name: "AddProduct", path: "/admin/product/create" ,icon:<DashBoardIcon/>},
   { name: "", path: " " },
 ];
-
 const Admin = () => {
-    const theme = useTheme();
-    const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
-    const[sideBarVisible,setSideBarVisible]=useState(false);
-    const navigate=useNavigate()
-    const drawer=(
-        <Box
-  sx={{
-    overflow: "auto",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    border:'1px solid blue',
-    height:"100%",
-    position:"sticky"
-  }}    
->
-  {/* {isLargeScreen && <Toolbar />} */}
-  <List>
-    {menu.map((item, index) => (
-      <ListItem key={item.name} disablePadding onClick={()=>navigate(item.path)}>
-        <ListItemButton>
-            <ListItemIcon>
-                {item.icon}
-            </ListItemIcon>
-            <ListItemText>{item.name}</ListItemText>
-        </ListItemButton>
-      </ListItem>
-    ))}
-  </List>
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const [sideBarVisible, setSideBarVisible] = useState(false);
+  const navigate = useNavigate();
 
-  <List>
-      <ListItem  disablePadding>
-        <ListItemButton>
+  const drawerWidth = '240px'; // or '15%'
+
+  const drawer = (
+    <Box
+      sx={{
+        overflow: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        border: '1px solid blue',
+        height: "100vh",          // Full viewport height
+        position: "fixed",        // Makes drawer sticky
+        top: 0,
+        left: 0,
+        width: drawerWidth,
+        bgcolor: '#fff',          // Add background for stickiness
+        zIndex: 1000
+      }}
+    >
+      {/* ...drawer content... */}
+      <List>
+        {menu.map((item, index) => (
+          <ListItem key={item.name} disablePadding onClick={() => navigate(item.path)}>
+            <ListItemButton>
+              <ListItemIcon>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText>{item.name}</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      {/* Account List at bottom */}
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
             <ListItemIcon>
-               <AccountCircleIcon/>
+              <AccountCircleIcon />
             </ListItemIcon>
             <ListItemText>Account</ListItemText>
-        </ListItemButton>
-      </ListItem>
-  </List>
-</Box>
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
+  )
 
-    )
   return (
     <div>
-        <div className='flex h-[100vh]'>
-            <CssBaseline/>
-            <div className='w-[15%] border border-r-gray-300 h-full'>
-                {drawer}
-            </div >
-            <div className='w-[68%]'>
-                <Routes>
-                    <Route path='/' element={<AdminDashBoard/>}></Route>
-                    <Route path='/product/create' element={<CreateProduct/>}></Route>
-                    <Route path='/products' element={<ProductsTable/>}></Route>
-                    <Route path='/orders' element={<OrdersTable/>}></Route>
-                    <Route path='/customers' element={<CustomersTable/>}></Route>
-                </Routes>
-            </div>
-        </div>
-
+      <CssBaseline />
+      {/* Sidebar - sticky */}
+      <div style={{
+        width: drawerWidth,
+        height: '100vh',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 1000,
+        borderRight: '1px solid #ccc',
+        background: '#fff'
+      }}>
+        {drawer}
+      </div>
+      {/* Main Content */}
+      <div style={{
+        marginLeft: drawerWidth,     // Push content to right of sidebar
+        width: `calc(100% - ${drawerWidth})`,
+        height: '100vh',
+        overflowY: 'auto'
+      }}>
+        <Routes>
+          <Route path='/' element={<AdminDashBoard />} />
+          <Route path='/product/create' element={<CreateProduct />} />
+          <Route path='/products' element={<ProductsTable />} />
+          <Route path='/orders' element={<OrdersTable />} />
+        </Routes>
+      </div>
     </div>
-  )
-}
-
-export default Admin
+  );
+};
+export default Admin;
