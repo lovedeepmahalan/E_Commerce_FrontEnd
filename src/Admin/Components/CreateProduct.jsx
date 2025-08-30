@@ -49,6 +49,7 @@ const CreateProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("data is ::",productData)
     dispatch(createProduct({ data: productData }));
   };
 
